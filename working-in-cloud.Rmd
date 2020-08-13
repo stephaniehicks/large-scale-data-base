@@ -3,3 +3,10 @@
 # Working in the Cloud {#working-in-cloud}
 
 blah blah blah
+
+
+## Session Info {-}
+
+```{r sessionInfo, echo=FALSE, results='asis'}
+rebook::prettySessionInfo()
+```

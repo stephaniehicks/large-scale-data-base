@@ -3,3 +3,9 @@
 # Best Practices for Users {#best-practices-users}
 
 blah blah blah
+
+## Session Info {-}
+
+```{r sessionInfo, echo=FALSE, results='asis'}
+rebook::prettySessionInfo()
+```

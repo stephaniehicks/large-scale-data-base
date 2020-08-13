@@ -3,3 +3,8 @@
 blah blah blah
 
 
+## Session Info {-}
+
+```{r sessionInfo, echo=FALSE, results='asis'}
+rebook::prettySessionInfo()
+```

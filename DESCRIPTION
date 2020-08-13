@@ -6,6 +6,9 @@ Description: Online book for orchestrating large-scale data analysis with Biocon
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports:
+Imports: BiocPkgTools, 
+  DelayedArray,
+  DelayedMatrixStats,
+  HDF5Array,
   SingleCellExperiment
-  DelayedArray
+  

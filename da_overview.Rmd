@@ -40,10 +40,10 @@ This has become particularly relevant with the advent of
 
 The DelayedArray framework is (unsurprisingly) implemented in the `r BiocStyle::Biocpkg("DelayedArray")` package.
 However, there are several other key packages that are an important part of the broader 'ecosystem'.
-More importantly, as a user of Bioconductor software, it is increasingly likely that you will encounter *DelayedArray* objects during a data analysis, especially if you are analysing single-cell data[^15].
+More importantly, as a user of Bioconductor software, it is increasingly likely that you will encounter *DelayedArray* objects during a data analysis, especially if you are analyzing single-cell data[^15].
 The following table lists packages that depend upon the `r BiocStyle::Biocpkg("DelayedArray")` package.
 
-In fact, if you use any package that makes use of the *SummarizedExperiment* class, then you will almost certainly load the `r BiocStyle::Biocpkg("DelayedArray")` package during the course of your analysis, whether you know it or not! This is because `r BiocStyle::Biocpkg("SummarizedExperiment")` depends upon `r BiocStyle::Biocpkg("DelayedArray")`.
+[^15]: In fact, if you use any package that makes use of the *SummarizedExperiment* class, then you will almost certainly load the `r BiocStyle::Biocpkg("DelayedArray")` package during the course of your analysis, whether you know it or not! This is because `r BiocStyle::Biocpkg("SummarizedExperiment")` depends upon `r BiocStyle::Biocpkg("DelayedArray")`.
 We will briefly highlight some of the key packages in this table, broadly categorising these as 'user-focused'/'user-facing' or 'developer-focused' packages and those that span the spectrum.
 
 ```{r}
@@ -54,6 +54,118 @@ da_dep_tbl <- da_dep_tbl[with(da_dep_tbl, order(edgetype, Package)), ]
 colnames(da_dep_tbl) <- c("Package", "Dependency Type")
 DT::datatable(da_dep_tbl)
 ```
+
+These packages that we are going to focus on in this section are:
+
+- `r BiocStyle::Biocpkg("DelayedArray")`
+- `r BiocStyle::Biocpkg("HDF5Array")`
+- `r BiocStyle::Biocpkg("DelayedMatrixStats")`
+
+Please see the workshop [`DESCRIPTION`](DESCRIPTION) for a full list of dependencies.
+
+### Packages that both users and developers should probably know about
+
+#### `r BiocStyle::Biocpkg("DelayedArray")`
+
+Well, duh.
+Implements the *DelayedArray* and *RleArray* classes, along with all the fundamentals the enable the delayed operations, block processing, and realization that underpin the DelayedArray framework.
+
+#### `r BiocStyle::Biocpkg("HDF5Array")`
+
+Implements the *HDF5Array* and *TENxMatrix* classes, two convenient and memory-efficient array-like containers for on-disk representation of HDF5 datasets. 
+*HDF5Array* is for datasets that use the conventional (i.e. dense) HDF5 representation.
+*TENxMatrix* is for datasets that use the sparse matrix HDF5 representation [produced by 10x Genomics CellRanger software](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/advanced/h5_matrices).
+
+#### `r BiocStyle::Githubpkg("LTLA/TileDBArray")`
+
+Implements a DelayedArray backend for [TileDB](https://tiledb.com/) to read, write and store dense and sparse arrays.
+The resulting *TileDBArray* objects are directly compatible with any Bioconductor package that accepts *DelayedArray* objects, serving as a swap-in replacement for the predominant *HDF5Array* that is currently used throughout the Bioconductor ecosystem for representing large datasets.
+
+**NB**: `r BiocStyle::Githubpkg("LTLA/TileDBArray")` is not yet available from Bioconductor.
+
+#### `r BiocStyle::Biocpkg("DelayedMatrixStats")`
+
+A port of the `r BiocStyle::CRANpkg("matrixStats")` API for use with *DelayedMatrix* objects.
+High-performing functions operating on rows and columns of *DelayedMatrix* objects, e.g. `col` / `rowMedians()`, `col` / `rowRanks()`, and `col` / `rowSds()`.
+Functions optimized per data type and for subsetted calculations such that both memory usage and processing time is minimized. 
+
+#### `r BiocStyle::Biocpkg("BiocSingular")`
+
+Implements exact and approximate methods for singular value decomposition and principal components analysis using a framework that allows them to be easily switched within Bioconductor packages or workflows.
+These methods work on *DelayedMatrix* objects as well as ordinary *matrix* objects and some sparse matrix objects from the `r BiocStyle::CRANpkg("Matrix")` package.
+
+`r BiocStyle::Biocpkg("BiocSingular")` defines a few interesting specialized *DelayedMatrix* subclasses that aim to preserve sparsity of the original matrix:
+
+- *DeferredMatrix*: Supports deferred centering and scaling of the columns of a matrix prior to principal components analysis.
+- *LowRankMatrix*: Provides a memory-efficient representation of a low-rank reconstruction, e.g., after a principal components analysis.
+- *ResidualMatrix*: Supports delayed calculation of the residuals from a linear model fit, usually prior to principal components analysis.
+
+#### `r BiocStyle::Biocpkg("VCFArray")` and `r BiocStyle::Biocpkg("GDSArray")`
+
+Implements the *VCFArray* and *GDSArray* classes, types of *DelayedArray*, to represent VCF files and GDS-files in an array-like representation. VCF and GDS files are widely used to represent genotyping or sequence data.
+
+#### `r BiocStyle::Biocpkg("rhdf5client")` and `r BiocStyle::Biocpkg("restfulSE")`
+
+Provide functions and classes to interface with remote data stores by operating on *SummarizedExperiment*-like objects.
+These data are HDF5 files living on a remote server running `h5serv`, a REST-based service for HDF5 data.
+
+
+
+### User-focused/user-facing packages
+
+These are the packages that as a user you might directly load/attach with `library()` as part of a data analysis.
+Alternatively, these may be loaded/attached as a dependency[^16] of another package you load/attach as part of an analysis.
+
+[^16]: As listed in the `Depends` field of the package `DESCRIPTION` file.
+
+#### `r BiocStyle::Biocpkg("DropletUtils")`
+
+Provides a number of utility functions for handling single-cell (RNA-seq) data from droplet technologies such as 10X Genomics.
+This includes `DropletUtils::read10xCounts()` for data loading from the count matrices produced by 10x Genomics' CellRanger software, which [may be stored in an HDF5 file](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/advanced/h5_matrices). 
+To do this, it makes use of the *TENxMatrix* class.
+
+#### `r BiocStyle::Biocpkg("LoomExperiment")`
+
+Provides a means to convert from 'loom' files to standard Bioconductor classes and back again.
+The [Loom file format](http://linnarssonlab.org/loompy/index.html) uses HDF5 to store experimental data and is used by some tools and labs producing data using single-cell assays.
+This includes the `LoomExperiment::import()` function for data loading from loom files into an *HDF5Matrix*.
+
+#### `r BiocStyle::Biocpkg("scuttle")`
+
+Provides basic utility functions for performing single-cell analyses, focusing on simple normalization, quality control and data transformations.
+Also provides some helper functions to assist development of other packages.
+These methods work on *DelayedMatrix* objects as well as ordinary *matrix* objects and some sparse matrix objects from the `r BiocStyle::CRANpkg("Matrix")` package.
+
+#### `r BiocStyle::Biocpkg("batchelor")`
+
+Implements a variety of methods for batch correction of single-cell (RNA sequencing) data, such as `multiBatchPCA()` and `fastMNN()`.
+These methods work on *DelayedMatrix* objects as well as ordinary *matrix* objects and some sparse matrix objects from the `r BiocStyle::CRANpkg("Matrix")` package.
+
+#### `r BiocStyle::Biocpkg("bsseq")`
+
+A collection of tools for analyzing and visualizing bisulfite sequencing data.
+This was one of the first packages to make use of the DelayedArray framework and it supports these throughout the package.
+This was needed in order to store and analyse large non-CpG methylation datasets (\> 300 million loci, hundreds of samples) using HDF5 files.
+
+Disclaimer: I develop `r BiocStyle::Biocpkg("bsseq")` and learnt a lot whilst updating it to support the DelayedArray framework.
+
+#### `r BiocStyle::Biocpkg("minfi")`
+
+Tools to analyze & visualize Illumina Infinium methylation arrays.
+This doesn't have the same level of support for *DelayedMatrix* objects as `r BiocStyle::Biocpkg("bsseq")`, but perhaps one day.
+This is needed in order to store and analyse large methylation datasets (\> 850,000 loci, tens of thousands of) using HDF5 files.
+
+Disclaimer: This was the second package, after `r BiocStyle::Biocpkg("bsseq")`, I started to re-write to support the DelayedArray framework. 
+Here, it is rather more difficult because it is a 'widely' used package and has code from lots of different authors with different coding styles.
+
+### Developer-focused packages
+
+#### `r BiocStyle::Biocpkg("beachmat")`
+
+Provides a consistent C++ class interface for reading from and writing data to a variety of commonly used matrix types.
+Ordinary matrices and several sparse/dense `r BiocStyle::CRANpkg("Matrix")` classes are directly supported, third-party S4 classes may be supported by external linkage (such as the *HDF5Matrix* class), while all other matrices are handled by DelayedArray block processing.
+
+
 
 ## Motivation 
 
@@ -154,7 +266,7 @@ To make things slightly easier, we will first subset the data to the first 1000 
 tenx_subset <- tenx[, 1:1000]
 ```
 
-#### Library sizes
+#### Library sizes {#da_library_sizes}
 
 Firstly, let's compute the library sizes for this subset of samples.
 We can do this using `colSums()`.
@@ -215,9 +327,483 @@ We'll now discuss each of these in turn.
 
 ## Delayed Operations 
 
+Taking a careful look at `tenx_subset`, we see that it is a *DelayedMatrix* rather than an *HDF5Matrix*.
+
+```{r}
+tenx_subset
+```
+
+The subsetting operation has 'degraded' the `tenx_subset` object to a *DelayedMatrix*.
+
+```{r}
+is(tenx_subset, "HDF5Matrix")
+is(tenx_subset, "DelayedMatrix")
+```
+
+The `showtree()` function can help us see what changed when we subsetted the data.
+
+```{r}
+# Compare the trees of delayed operations.
+showtree(tenx)
+
+showtree(tenx_subset)
+```
+
+The subsetting operation has been registered in what is termed a 'delayed operation'.
+Registering a delayed operation does not modify the underlying data.
+Instead, the operation is recorded and only performed when the *DelayedArray* object is 'realized'.
+Realization of a *DelayedArray* triggers the execution of the delayed operations carried by the object and returns the result as an ordinary *array*.
+
+This allows us to chain together multiple operations and only perform them as required.
+Here is a contrived example.
+
+```{r}
+# Add 1 to every element (a delayed op).
+x <- tenx_subset + 1L
+showtree(x)
+
+# Compute log of every element (another delayed op).
+lx <- log(x)
+showtree(lx)
+
+# Transpose the result (another delayed op).
+tlx <- t(lx)
+showtree(tlx)
+
+# Realize a subset of the data as an ordinary matrix.
+as.array(tlx[1:5, 1:10])
+```
+
+Many common operations can be registered as delayed operations.
+We will now go through some examples[^6].
+Notice that in each case the result is 'degraded' to a *DelayedMatrix*[^7].
+
+[^6]: The technical names of each type of delayed operation are not important.
+
+[^7]: The [No-op] example is the obvious exception.
+
+### DelayedSubset
+
+See `?DelayedSubset`.
+
+```{r}
+val <- tenx[, 1:100]
+val
+
+showtree(val)
+```
+
+### DelayedAperm
+
+See `?DelayedAperm`.
+
+```{r}
+val <- t(tenx)
+val
+
+showtree(val)
+```
+
+### DelayedUnaryIsoOp
+
+See `?DelayedUnaryIsoOp`.
+
+```{r}
+val <- tenx + 1L
+val
+
+showtree(val)
+
+val <- tenx + 1:2
+val
+
+showtree(val)
+```
+
+### DelayedSubassign
+
+See `?DelayedSubassign`.
+
+```{r}
+tmp <- tenx
+tmp[1, ] <- sample(10, ncol(tmp), replace = TRUE)
+tmp
+
+showtree(tmp)
+```
+
+**WARNING**: Be careful with delayed subassignment because you can end up with objects that are surprisingly large in-memory.
+This is because the subassigned values are kept in-memory until the data are *realized*.
+
+### DelayedDimnames
+
+See `?DelayedDimnames`.
+
+```{r}
+tmp <- tenx
+rownames(tmp) <- paste0("R", seq_len(nrow(tmp)))
+tmp
+
+showtree(tmp)
+```
+
+### DelayedNaryIsoOp
+
+See `?DelayedNaryIsoOp`.
+
+```{r}
+val <- tenx + tenx
+val
+
+showtree(val)
+```
+
+### DelayedAbind
+
+See `?DelayedAbind`.
+
+```{r}
+val <- cbind(tenx, tenx)
+val
+
+showtree(val)
+```
+
+### No-op
+
+The DelayedArray framework is smart enough to recognise that some combinations of operations are 'no-ops'.
+
+See `?is_noop`.
+
+```{r}
+val <- t(t(tenx))
+val
+
+showtree(val)
+```
+
+But it can be fooled.
+
+```{r}
+# This is a no-op but DelayedArray doesn't recognise it as one.
+val <- tenx + 0L
+val
+
+showtree(val)
+```
+
 ## Block Processing 
+
+In [Library sizes](#da_library_sizes), we computed the column sums of `tenx_subset` by running `colSums(tenx_subset`).
+If you have used the `base::colSums()` function in your own R work, then this code likely looks familiar to you.
+However, recall that the `tenx_subset` data live on disk in an HDF5 file, so how did `colSums()` know how to handle this?
+
+The 'trick' is that we are using a specialised version of `colSums()`^[Specifically, `DelayedArray::colSums()`.] which uses a technique called 'block processing' to compute the column sums.
+
+### Illustration of block processing
+
+Block processing involves 2 steps: 
+
+1. Load a 'block' of the data into memory and compute a statistic(s) on the block.
+2. Combine the block-level statistics in an appropriate way to get the final result.
+
+Some examples of block processing are illustrated in the following figures:
+
+`r knitr::include_graphics("https://raw.githubusercontent.com/PeteHaitch/BioC2020_DelayedArray_workshop/master/vignettes/images/block_processing_1.png")`
+`r knitr::include_graphics("https://raw.githubusercontent.com/PeteHaitch/BioC2020_DelayedArray_workshop/master/vignettes/images/block_processing_2.png")`
+`r knitr::include_graphics("https://raw.githubusercontent.com/PeteHaitch/BioC2020_DelayedArray_workshop/master/vignettes/images/block_processing_3.png")`
+`r knitr::include_graphics("https://raw.githubusercontent.com/PeteHaitch/BioC2020_DelayedArray_workshop/master/vignettes/images/block_processing_4.png")`
+`r knitr::include_graphics("https://raw.githubusercontent.com/PeteHaitch/BioC2020_DelayedArray_workshop/master/vignettes/images/block_processing_5.png")`
+`r knitr::include_graphics("https://raw.githubusercontent.com/PeteHaitch/BioC2020_DelayedArray_workshop/master/vignettes/images/block_processing_6.png")`
+`r knitr::include_graphics("https://raw.githubusercontent.com/PeteHaitch/BioC2020_DelayedArray_workshop/master/vignettes/images/block_processing_7.png")`
+
+For example, to compute the column sums we could define a block to be a column, loop over the blocks (columns), load each block (column) into memory, and compute it's sum.
+You may already be thinking:
+
+- "I have a very 'tall' matrix and I can't load even a single column into memory. Can block processing support this?"
+- "I have enough RAM to load 100 columns of my matrix into memory. Can block processing support this?"
+
+The answer to both these questions is generally "yes", which we will return to in the [Block size] section.
+
+### Using a function implemented with block processing
+
+To more clearly see block processing in action, we'll (temporarily) turn on verbose block processing and re-run `colSums(tenx_subset)`.
+
+```{r}
+# Enable verbose block processing.
+DelayedArray:::set_verbose_block_processing(TRUE)
+
+# Compute the column sums.
+# invisible() is used to prevent the result from printing to the screen.
+invisible(colSums(tenx_subset))
+
+# Disable verbose block processing.
+DelayedArray:::set_verbose_block_processing(FALSE)
+```
+
+In this case, `colSums()` has processed `tenx_subset` in `r length(defaultAutoGrid(tenx_subset))` blocks.
+The verbose progress report tells us that these blocks are over the *rows* of `tenx_subset`.
+
+Let's take a look at a few more examples of functions implemented with block processing.
+
+#### Functions in DelayedArray
+
+Some of the most useful functions in the `r BiocStyle::Biocpkg("DelayedArray")` package implement common operations on a *DelayedMatrix* using block processing.
+These include the following row and column summarization methods:
+
+- `rowSums()`
+- `colSums()`
+- `rowMeans()`
+- `colMeans()`
+- `rowMaxs()`
+- `colMaxs()`
+- `rowMins()`
+- `colMins()`
+- `rowRanges()`
+- `colRanges()`
+
+Two useful but lesser known functions use block processing to compute column/row sums of a *DelayedMatrix* based on a grouping variable:
+
+- `rowsum()`
+- `colsum()`
+
+Matrix multiplication is also implemented using block processing:
+
+```{r}
+# This is mathematically equivalent to colSums(tenx_subset).
+matrix(1, ncol = nrow(tenx_subset)) %*% tenx_subset
+```
+
+#### Functions in DelayedMatrixStats
+
+We've already seen the `r BiocStyle::Biocpkg("DelayedMatrixStats")` package in action back when computing the [Median expression of each gene].
+`r BiocStyle::Biocpkg("DelayedMatrixStats")` is a port of the `r BiocStyle::CRANpkg("matrixStats")` package's API for use with *DelayedMatrix* objects.
+It provides [more than 70 functions](https://github.com/PeteHaitch/DelayedMatrixStats#api-coverage) that apply to rows and columns of *DelayedMatrix* objects.
+
+You can try out some of the block processing functions from `r BiocStyle::Biocpkg("DelayedArray")` and `r BiocStyle::Biocpkg("DelayedMatrixStats")` on `tenx_subset`^[If you try these out on `tenx` you might be waiting a while, so we don't recommend this.].
+
+### Writing a function that implements block processing
+
+As we have seen, many common row/column summarization methods on a *DelayedMatrix* have already been implemented in `r BiocStyle::Biocpkg("DelayedArray")` and `r BiocStyle::Biocpkg("DelayedMatrixStats")`.
+Nevertheless, there may be times that you need to write your own function that implements block processing.
+The documentation on this topic is a little sparse, but some details can be found in `?blockApply`, `?ArrayGrid`, and `?AutoGrid`, or by reading the source code of the aforementioned packages. 
+Briefly, to perform block processing requires that you:
+
+1. Set up an *ArrayGrid* over the *DelayedArray* to be processed. This specifies the block structure that will be traversed when processing the *DelayedArray*.
+    - The `defaultAutoGrid()`, `rowAutoGrid()`, and `colAutoGrid()` functions can make automatic grids for block processing.
+    - The `RegularArrayGrid()`, `ArbitraryArrayGrid()`, and `chunkGrid()` functions may be needed for low-level control over the construction of the grids for block processing.
+2. Iterate over the *DelayedArray* via the *ArrayGrid* to read each block of data into memory as an ordinary (i.e. dense) or sparse array and compute the statistic for that block.
+    - The `blockApply()` and `blockReduce()` functions can help perform the block processing, even incorporating parallelization via the `r BiocStyle::Biocpkg("BiocParallel")` package.
+3. Appropriately combine the block-level statistics to get your final result.
+    - This is typically up to you as a developer of the function.
+
+#### Example
+
+Let's implement a basic version of `colSums()` where we define each block to be a single column.
+
+```{r}
+basic_colSums <- function(x) {
+  # 1. Set up the ArrayGrid.
+  grid <- colAutoGrid(x, ncol = 1)
+  # 2. Load the blocks into memory and compute the block-level statistics.
+  block_level_stat <- blockApply(x, colSums, grid = grid)
+  # 3. Combine the block-level statistics.
+  unlist(block_level_stat)
+}
+
+# Check basic_colSums() gives the correct result.
+identical(basic_colSums(tenx_subset), colSums(tenx_subset))
+```
+
+Try these out yourself to explore more about block processing: 
+
+- Try modifying `basic_colSums()` to define each block as a group of 100 columns.
+- Try implementing `basic_rowSums()`, a basic `rowSums()`, using `rowAutoGrid()` to define each block as a single rows.
+- Try modifying `basic_rowSums()` to define each block as a group of 10 rows.
+- Try modifying `basic_colSums()` or `basic_rowSums()` to define each block using the `defaultAutoGrid()`.
+
 
 ## Realization 
 
+To *realize* a *DelayedArray* object is to trigger execution of the delayed operations carried by the object and return the result as an ordinary (i.e. dense) or sparse array.
+
+### Realizing in-memory
+
+We can realize a *DelayedArray* in memory as an ordinary (i.e. dense) or sparse array.
+
+To realize a *DelayedArray* as an ordinary array, we can call `as.array()` on it.
+
+```{r}
+tenx_subset_realized <- as.array(tenx_subset)
+class(tenx_subset_realized)
+```
+
+You may have noticed that the `tenx_subset` data contains a lot of zero values.
+We might therefore opt to realize the data as a sparse matrix, specifically a sparse matrix from the `r BiocStyle::CRANpkg("Matrix")` package.
+
+```{r}
+tenx_subset_sparse <- as(tenx_subset, "sparseMatrix")
+class(tenx_subset_sparse)
+```
+
+Realizing as a sparse matrix is particularly useful when the data are stored in a sparse *DelayedArray* object^[A sparse *DelayedArray* is one for which `is_sparse()` returns `TRUE`.], such as the *TENxMatrix* object described in [Realizing to disk].
+
+### Realizing to disk
+
+[Realizing in-memory] realizes the entire object in memory, which could require too much RAM if the object is large[^12].
+Therefore, a large *DelayedArray* object may preferably by realized to disk.
+
+[^12]: In the above example it's safe because `tenx_subset` only requires around 100 Mb of memory even as an ordinary array.
+
+Here we will demonstrate by realizing to an HDF5 file, but we could also realize to another on-disk backend such as a TileDB array (see [Realization backends]).
+Realizing to an HDF5 file requires that the `r BiocStyle::Biocpkg("HDF5Array")` package is installed.
+
+We can realize to disk as a dense array in an HDF5 file (*HDF5Array*) or as a sparse array (*TENxMatrix*).
+The process of realization uses block processing, which avoids loading the entire dataset into memory at once.
+To more clearly see block processing in action, we'll (temporarily) turn on verbose block processing.
+
+To realize a *DelayedArray* as a dense array in an HDF5 file, we can call `writeHDF5Array()` on it.
+
+```{r}
+# Enable verbose block processing.
+DelayedArray:::set_verbose_block_processing(TRUE)
+
+tenx_subset_hdf5 <- writeHDF5Array(tenx_subset)
+```
+
+To realize a *DelayedArray* as a sparse array in an HDF5 file, in the format used by 10x Genomics, we can call `writeTENxMatrix()` on it.
+
+```{r}
+tenx_subset_sparse_hdf5 <- writeTENxMatrix(tenx_subset)
+
+# Disable verbose block processing.
+DelayedArray:::set_verbose_block_processing(FALSE)
+```
+
+Notice that the results of these realizations are an *HDF5Matrix* and a *TENxMatrix*, respectively.
+
+```{r}
+class(tenx_subset_hdf5)
+
+class(tenx_subset_sparse_hdf5)
+```
+
+Furthermore, neither `tenx_subset_hdf5` nor `tenx_subset_sparse_hdf5` carry around the delayed operations of `tenx_subset` because these have been *realized* before writing the data.
+
+```{r}
+# Compare the trees of delayed operations.
+showtree(tenx_subset)
+
+showtree(tenx_subset_hdf5)
+
+showtree(tenx_subset_sparse_hdf5)
+```
+
+Used like this, `writeHDF5Array()` and `writeTENxMatrix()` will write their results to a file in the *HDF5 dump directory*, a dumping ground for automatically created HDF5 datasets (see `?setHDF5DumpDir()`).
+We can see a log of the operations that have written to the HDF5 dump directory using `showHDF5DumpLog()`.
+
+```{r}
+showHDF5DumpLog()
+```
+
+Often, however, we will want full control of where and how the data are written to the HDF5 file[^14] and the `writeHDF5Array()` and `writeTENxMatrix()` functions give you full control over this and more.
+As an example, we'lll write the data to a user-specified HDF5 file by [Chunking] along the columns and using maximum [Chunk compression].
+
+[^14]: We'll discuss why you might want this later in the workshop.
+
+```{r}
+my_hdf5_file <- tempfile(fileext = ".h5")
+tenx_subset_my_file_hdf5 <- writeHDF5Array(
+  tenx_subset,
+  filepath = my_hdf5_file,
+  chunkdim = c(nrow(tenx_subset), 1),
+  level = 9)
+
+# Compare the seeds of these objects.
+seed(tenx_subset_hdf5)
+
+seed(tenx_subset_my_file_hdf5)
+```
+
+### Realization backends
+
+We've now how we can realize to an HDF5 file.
+This is called the HDF5Array 'realization backend' and is implemented in the `r BiocStyle::Biocpkg("HDF5Array")` package.
+There are a few other realization backends to be aware of^[The `r BiocStyle::Githubpkg("LTLA/TileDBArray")` provides a TileDB realization backend, but this packages is not yet available from Bioconductor.].
+
+```{r}
+supportedRealizationBackends()
+```
+
+There is also the `NULL` backend, which means the data are realized in memory as an ordinary *array* and then wrapped in a *DelayedArray*.
+This is the default realization backend upon loading/attaching the `r BiocStyle::Biocpkg("DelayedArray")` package.
+
+```{r}
+getRealizationBackend()
+```
+
+The default realization backend can be altered with `setRealizationBackend()`.
+
+```{r}
+setRealizationBackend("HDF5Array")
+getRealizationBackend()
+
+setRealizationBackend(NULL)
+getRealizationBackend()
+```
+
+It can be important to know what your current realization backend is because it will be used implicitly by some functions.
+For example, matrix multiplication that involves a *DelayedMatrix* uses the current realization backend.
+
+```{r}
+# Enable verbose block processing.
+DelayedArray:::set_verbose_block_processing(TRUE)
+
+# Perform matrix multiplication with HDF5Array backend.
+setRealizationBackend("HDF5Array")
+tenx_subset %*% matrix(1, nrow = ncol(tenx_subset))
+
+# Perform matrix multiplication with NULL backend.
+setRealizationBackend(NULL)
+tenx_subset %*% matrix(1, nrow = ncol(tenx_subset))
+
+# Disable verbose block processing.
+DelayedArray:::set_verbose_block_processing(TRUE)
+```
+
+### The `realize()` function
+
+We've seen that we can realize to the HDF5Array backend using `writeHDF5Array(tenx_subset)`.
+We could also use coercion by calling `as(tenx_subset, "HDF5Array")`.
+A third way of realizing a *DelayedArray* to an HDF5 file is with the `realize()` function.
+
+```{r}
+realize(tenx_subset, BACKEND = "HDF5Array")
+```
+
+So why might you use `realize()` instead of these other options?
+Because it allows us to easily switch out the realization backend and will defer to the current realization backend if none is supplied.
+
+```{r}
+# Set the default realization backend to be HDF5Array.
+setRealizationBackend("HDF5Array")
+
+# Realize as a TENxMatrix by explicitly specifying it.
+realize(tenx_subset, BACKEND = "TENxMatrix")
+
+# Realize to the current realization backend if no BACKEND is supplied.
+realize(tenx_subset)
+
+# Set the default realization backend to be NULL.
+setRealizationBackend(NULL)
+```
+
+This is probably most useful when writing package code so that you can allow the user control over the realization backend.
 
 
+
+## Session Info {-}
+
+```{r sessionInfo, echo=FALSE, results='asis'}
+rebook::prettySessionInfo()
+```

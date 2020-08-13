@@ -5,17 +5,14 @@
 
 ## Contributors
 
-- Sean Davis
-- Laurent Gatto
-- Kasper Hansen
-- [Peter Hickey](https://peterhickey.org/) (hickey@wehi.edu.au), Walter and Eliza Hall Institute of Medical Research, Australia
-- [Stephanie Hicks](https://www.stephaniehicks.com) (shicks19@jhu.edu), Johns Hopkins Bloomberg School of Public Health, USA
-- Aaron Lun
-- Martin Morgan
-- Herve Pages
-- Davide Risso
-
-
+- [Laurent Gatto](https://lgatto.github.io), UCLouvain, Belgium
+- [Kasper Hansen](https://www.hansenlab.org), Johns Hopkins Bloomberg School of Public Health, USA
+- [Peter Hickey](https://peterhickey.org/), Walter and Eliza Hall Institute of Medical Research, Australia
+- [Stephanie Hicks](https://www.stephaniehicks.com), Johns Hopkins Bloomberg School of Public Health, USA
+- [Aaron Lun](https://github.com/LTLA), Genentech, USA
+- [Martin Morgan](https://www.roswellpark.org/martin-morgan), Roswell Park Comprehensive Cancer Center, USA
+- [Herve Pages](https://github.com/hpages), Fred Hutchinson Cancer Research, USA
+- [Davide Risso](https://drisso.github.io), University of Padova, Italy
 
 ## Acknowledgments
 

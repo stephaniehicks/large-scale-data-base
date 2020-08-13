@@ -1,3 +1,10 @@
 # Workflow tips for DelayedArray-backed analyses {#da_analyses}
 
 Blah blah blah. 
+
+
+## Session Info {-}
+
+```{r sessionInfo, echo=FALSE, results='asis'}
+rebook::prettySessionInfo()
+```
