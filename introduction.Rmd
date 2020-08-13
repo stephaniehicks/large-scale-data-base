@@ -1,0 +1,25 @@
+# (PART) Preamble {-}
+
+```{r setup, echo=FALSE, results="asis"}
+library(rebook)
+chapterPreamble(cache = TRUE)
+```
+
+
+# Introduction {#introduction}
+
+blah blah blah
+
+
+## Contents of this book
+
+blah blah blah
+
+## Who this book is for
+
+blah blah blah
+
+
+## Bioconductor
+
+[Bioconductor](http://bioconductor.org/) is an **open source** and **open development** project, providing a cohesive yet flexible framework for analyzing high-throughput genomics data in R. The Bioconductor project consists of almost 2000 contributed R packages, as well as core infrastructure maintained by the Bioconductor Core Team, providing a rich analysis environment for users.

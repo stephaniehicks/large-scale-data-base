@@ -1,0 +1,11 @@
+Package: OrchestratingLargeScaleDataAnalysis
+Title: Orchestrating Large-Scale Data Analysis with Bioconductor
+Version: 0.0.1
+Authors@R: c(person('Stephanie C.', 'Hicks', role = c('aut', 'cre')))
+Description: Online book for orchestrating large-scale data analysis with Bioconductor.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+  SingleCellExperiment
+  DelayedArray

@@ -1,0 +1,22 @@
+# (PART) Appendix {-}
+
+# Contributors and acknowledgments{-}
+
+
+## Contributors
+
+- Sean Davis
+- Laurent Gatto
+- Kasper Hansen
+- [Peter Hickey](https://peterhickey.org/) (hickey@wehi.edu.au), Walter and Eliza Hall Institute of Medical Research, Australia
+- [Stephanie Hicks](https://www.stephaniehicks.com) (shicks19@jhu.edu), Johns Hopkins Bloomberg School of Public Health, USA
+- Aaron Lun
+- Martin Morgan
+- Herve Pages
+- Davide Risso
+
+
+
+## Acknowledgments
+
+

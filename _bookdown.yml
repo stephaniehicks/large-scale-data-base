@@ -1,0 +1,27 @@
+book_filename: "orchestrating_big_data_analysis_bioconductor"
+pagetitle: "Orchestrating Large-Scale Data Analysis with Bioconductor"
+delete_merged_file: true
+new_session: true
+language:
+  ui:
+    chapter_name: "Chapter "
+repo: "stephaniehicks/large-scale-data-base"
+output_dir: "docs"
+rmd_files: ["index.Rmd",
+    # Part 1: Introduction:
+    "introduction.Rmd",
+    "data_formats_bioc.Rmd",
+    # Part 2: DelayedArray framework:
+    "da_overview.Rmd",
+    "da_analyses.Rmd",
+    # Part 3: Best practices:
+    "best-practices-users.Rmd", 
+    "best-practices-developers.Rmd",
+    # Part 4: Working in the cloud:
+    "working-in-cloud.Rmd",
+    # Part 5: Workflows:
+    "wf-scrna-tenxbraindata.Rmd",
+    "wf-dnam.Rmd",
+    # Part 6: Appendix:
+    "contributors.Rmd",
+    "references.Rmd"]

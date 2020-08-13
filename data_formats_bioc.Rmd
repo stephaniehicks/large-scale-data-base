@@ -1,0 +1,31 @@
+# Common Data Formats {#data_formats_bioc}
+
+```{r setup, echo=FALSE, results="asis"}
+library(rebook)
+chapterPreamble(cache = TRUE)
+```
+
+Chapter on common data formats to store large-scale data in R and Bioconductor
+
+
+## SummarizedExperiment
+
+
+## Sparse data
+
+
+## HDF5
+
+
+## TileDB
+
+
+## VCF
+
+
+## GDS
+
+
+
+
+

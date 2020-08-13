@@ -1,0 +1,3 @@
+# Workflow tips for DelayedArray-backed analyses {#da_analyses}
+
+Blah blah blah. 

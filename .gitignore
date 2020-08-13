@@ -1,0 +1,29 @@
+# OS files
+.DS_Store
+
+# Rstudio files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rbuildignore
+*.R
+
+# compiled bookdown 
+docs/*
+_bookdown_files
+
+# data and images
+*.rds
+*.png
+
+# any cache files
+*_cache
+*_files
+*.html
+*.md
+!README.md
+
+# raw data files
+raw_data/
+*.swp
