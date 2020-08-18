@@ -10,5 +10,6 @@ Imports: BiocPkgTools,
   DelayedArray,
   DelayedMatrixStats,
   HDF5Array,
+  scuttle,
   SingleCellExperiment
   

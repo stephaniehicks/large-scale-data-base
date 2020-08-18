@@ -1,5 +1,3 @@
-# (PART) Working in the Cloud {-}
-
 # Working in the Cloud {#working-in-cloud}
 
 blah blah blah

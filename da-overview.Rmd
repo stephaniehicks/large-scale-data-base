@@ -1,40 +1,44 @@
 # (PART) DelayedArray {-}
 
-# DelayedArray framework {#da_overview}
+# DelayedArray framework {#da-overview}
+
+```{r setup, echo=FALSE, results="asis"}
+library(rebook)
+chapterPreamble(cache = TRUE)
+```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-In this Section, we will discuss how to effectively using the DelayedArray framework to support the analysis of large datasets in Bioconductor.
+In this chapter, we will discuss how to effectively using the `r BiocStyle::Biocpkg("DelayedArray")` framework to support the analysis of large datasets in Bioconductor.
 A DelayedArray is like an ordinary array in R, but allows for the data to be in-memory, on-disk in a file, or even hosted on a remote server.
 At the end of this chapter, you will know how you might encounter a DelayedArray in the wild while using Bioconductor and understand the fundamental concepts underlying the DelayedArray framework. 
 
 **Almost all of this material is borrowed with permission from Pete Hickey's Bioconductor 2020 Workshop ["Effectively using the DelayedArray framework to support the analysis of large datasets"](https://petehaitch.github.io/BioC2020_DelayedArray_workshop/articles/Effectively_using_the_DelayedArray_framework_for_users.html)**.
 
-**Learning goals**
+**Learning objectives** 
 
 - Learn of existing packages and functions that use the DelayedArray framework.
 - Develop a high-level understanding of classes and packages that implement the DelayedArray framework.
+  - Identify when an object is a DelayedArray or one of its derivatives.
+  - Be able to recognize when it is useful to use a DelayedArray instead of an ordinary array or other array-like data structure.
 - Become familiar with the fundamental concepts of Delayed operations, Block processing, and Realization.
-- Reason about potential bottlenecks, and how to avoid or reduce these, in algorithms operating on DelayedArray objects.
+  - Learn how to load and save a DelayedArray-backed object.
+  - Learn how the 'block size' and 'chunking' of the dataset affect performance when operating on DelayedArray objects.
 
-**Learning objectives** 
 
-- Identify when an object is a DelayedArray or one of its derivatives.
-- Be able to recognize when it is useful to use a DelayedArray instead of an ordinary array or other array-like data structure.
-- Learn how to load and save a DelayedArray-backed object.
-- Learn how the 'block size' and 'chunking' of the dataset affect performance when operating on DelayedArray objects.
-- Take away some miscellaneous tips and tricks I’ve learnt over the years when working with DelayedArray-backed objects.
 
 ## Overview
 
-The DelayedArray framework enables the analysis of datasets that are too large to be stored or processed in-memory. 
-This has become particularly relevant with the advent of 
+The `r BiocStyle::Biocpkg("DelayedArray")` framework enables the analysis of datasets that are too large to be stored or processed in-memory. 
+This has become particularly relevant with the advent of
 
 - whole-genome bisulfite-sequencing (WGBS) studies with tens of millions of CpGs
 - large single-cell RNA-sequencing (scRNA-seq) studies containing tens of thousands to millions of cells
+- Mass spectrometry for proteomics with data composed of millions of small matrices (plus metadata for each of these matrices)
 - ... add more examples here
+
 
 ## The DelayedArray ecosystem
 
@@ -67,7 +71,6 @@ Please see the workshop [`DESCRIPTION`](DESCRIPTION) for a full list of dependen
 
 #### `r BiocStyle::Biocpkg("DelayedArray")`
 
-Well, duh.
 Implements the *DelayedArray* and *RleArray* classes, along with all the fundamentals the enable the delayed operations, block processing, and realization that underpin the DelayedArray framework.
 
 #### `r BiocStyle::Biocpkg("HDF5Array")`
@@ -257,7 +260,7 @@ We can learn more about the internals of the `tenx` object using the `seed()` fu
 seed(tenx)
 ```
 
-### Examples of computing on a DelayedArray
+### Examples of computing on a DelayedArray {#da_tenx_subset}
 
 We will now play around with computing on the counts matrix.
 To make things slightly easier, we will first subset the data to the first 1000 samples.

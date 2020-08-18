@@ -1,4 +1,6 @@
-# Best Practices for Developers {#best-practices-developers}
+# (PART) Parallelization and Working in the Cloud {-}
+
+# Parallization in Bioconductor {#parallel-bioc}
 
 blah blah blah
 

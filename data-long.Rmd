@@ -1,0 +1,22 @@
+# (PART) Best Practices {-}
+
+# Data with millions of features {#data-long}
+
+```{r setup, echo=FALSE, results="asis"}
+library(rebook)
+chapterPreamble()
+```
+
+```{r setup-chunks, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Motivation
+
+Discuss DNA methylation data as the example. 
+
+## Session Info {-}
+
+```{r sessionInfo, echo=FALSE, results='asis'}
+rebook::prettySessionInfo()
+```

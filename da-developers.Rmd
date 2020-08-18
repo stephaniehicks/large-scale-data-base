@@ -1,0 +1,16 @@
+# Best Practices for Developers {#da-developers}
+
+## beachmat
+
+**To be added**: discuss `r BiocStyle::Biocpkg("beachmat")` (C++ class interface for reading from and writing data to a variety of commonly used matrix types including ordinary matrices, sparse/dense Matrix classes, and DelayedArray objects. 
+ 
+## Advice on benchmarking
+
+**To be added**: discuss advice on profiling time and memory-usage
+
+
+## Session Info {-}
+
+```{r sessionInfo, echo=FALSE, results='asis'}
+rebook::prettySessionInfo()
+```

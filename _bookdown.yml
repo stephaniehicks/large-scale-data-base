@@ -12,12 +12,15 @@ rmd_files: ["index.Rmd",
     "introduction.Rmd",
     "data_formats_bioc.Rmd",
     # Part 2: DelayedArray framework:
-    "da_overview.Rmd",
-    "da_analyses.Rmd",
+    "da-overview.Rmd",
+    "da-analyses.Rmd",
+    "da-developers.Rmd",
     # Part 3: Best practices:
-    "best-practices-users.Rmd", 
-    "best-practices-developers.Rmd",
-    # Part 4: Working in the cloud:
+    "data-long.Rmd",
+    "data-wide.Rmd",
+    "data-many-small-files.Rmd",
+    # Part 4: Parallization and Working in the Cloud:
+    "parallel-bioc.Rmd",
     "working-in-cloud.Rmd",
     # Part 5: Workflows:
     "wf-scrna-tenxbraindata.Rmd",
