@@ -15,6 +15,7 @@ install.packages("BiocManager")
 BiocManager::install("ExperimentHub")
 BiocManager::install("DelayedArray")
 BiocManager::install("DelayedMatrixStats")
+BiocManager::install("scuttle")
 remotes::install_github("LTLA/rebook")
 ```
 
@@ -48,15 +49,7 @@ First clone the repository.
 git clone https://github.com/stephaniehicks/large-scale-data-base.git
 ```
 
-Then open the project file `large-scale-data-base.Rproj` in RStudio. 
-**Note**: compiling seems to work best using RStudio, due to `pandoc` and other requirements.
-
-Install the **rebook** package from https://github.com/LTLA/rebook.
-Then, run the usual **bookdown** invocation, for example:
-
-```r
-bookdown::render_book("index.Rmd", "bookdown::gitbook")
-```
+**Note**: Users need to install the **rebook** package from https://github.com/LTLA/rebook.
 
 Advanced users can call `make` to perform a "pre-compilation" prior to the above command.
 This generates cached content to be used by the serial **bookdown** invocation,
@@ -66,6 +59,14 @@ and is most useful when the `make` itself is parallelized.
 make
 rm -rf _bookdown_files
 R -e 'bookdown::render_book("index.Rmd", "bookdown::gitbook")'
+```
+
+After you've run the [Makefile](Makefile), a user can also open the project file `large-scale-data-base.Rproj` in RStudio. 
+
+Then, run the usual **bookdown** invocation within R, for example:
+
+```r
+bookdown::render_book("index.Rmd", "bookdown::gitbook")
 ```
 
 
