@@ -442,6 +442,18 @@ rhdf5::h5ls(path(counts(sce)))
 ```
 
 
+## Final thoughts
+
+> **Don't use a *DelayedArray* if you can don't need to!**
+
+This framework is incredibly powerful, but the simple fact remains:
+
+> **If you can load your data into memory and still compute on it, then you're always going to have a better time doing it that way.**
+
+Analyses will be faster, simpler, and you will have more software options available to you.
+But when this is not an option, then the DelayedArray framework is a powerful set of packages to help you get your work done.
+
+
 
 ## Session Info {-}
 

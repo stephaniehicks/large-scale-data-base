@@ -1,4 +1,4 @@
-# Common Data Formats {#data_formats_bioc}
+# Common Data Formats {#data-formats-bioc}
 
 ```{r setup, echo=FALSE, results="asis"}
 library(rebook)
@@ -29,7 +29,7 @@ The DelayedArray framework offers a solution to this problem.
 By wrapping an array-like object (typically an on-disk object) in a *DelayedArray* object, it allows one to perform common array operations on the data without loading the object in memory. 
 In order to reduce memory usage and optimize performance, operations on the object are either delayed or executed using a block processing mechanism.
 
-We will learn more about the [DelayedArray framework](#da_overview). 
+We will learn more about the [DelayedArray framework](#da-overview). 
 
 
 ## Sparse data
@@ -46,4 +46,10 @@ We will learn more about the [DelayedArray framework](#da_overview).
 
 ## GDS
 
+
+## Choice of disk-backed backends
+
+- `r BiocStyle::Biocpkg("HDF5Array")` is the current *de facto* standard in Bioconductor (and HDF5 files are the *de facto* standard for disk-backed array-like datasets in scientific computing).
+- `r BiocStyle::Githubpkg("TileDB-Inc/TileDB-R")` and `r BiocStyle::Githubpkg("LTLA/TileDBArray")` look very interesting but are not available from CRAN or Bioconductor at the time of writing.
+- The `r BiocStyle::Biocpkg("matter")` package could be the basis of a (hypothetical) *matterArray* backend.
 

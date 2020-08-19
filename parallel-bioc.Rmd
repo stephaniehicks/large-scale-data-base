@@ -2,7 +2,14 @@
 
 # Parallization in Bioconductor {#parallel-bioc}
 
-blah blah blah
+**To add**: Parallelization with disk-backed data.
+
+- Parallelization performance depends heavily on (A) the choice of backend, and (B) your computer's hardware.
+- Some rules of thumb:
+  - Parallelization is never as straightforward or provides as big an improvement as you think/hope.
+  - Parallel *writing* to files (e.g. HDF5 files) is a no go.
+  - Parallel *reading* from files is sometimes, maybe, perhaps okay ... 
+
 
 ## Session Info {-}
 

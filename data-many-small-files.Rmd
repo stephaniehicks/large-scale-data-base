@@ -13,6 +13,12 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 Discuss proteomics as the example. 
 
+Discuss general construction of a disk-backed *DelayedArray* (e.g., *HDF5Array*) from a bunch of files (e.g., CSV files, BAM files, BED files, BigWig files, etc.)
+
+- This requires the construction of a *RealizationSink* (see `?RealizationSink`).
+- `bsseq::read.bismark()` and `minfi:::read.metharray2()` are (early) examples of constructing a HDF5-backed *SummarizedExperiment* from a bunch of files.
+
+
 ## Session Info {-}
 
 ```{r sessionInfo, echo=FALSE, results='asis'}

@@ -804,7 +804,6 @@ setRealizationBackend(NULL)
 This is probably most useful when writing package code so that you can allow the user control over the realization backend.
 
 
-
 ## Session Info {-}
 
 ```{r sessionInfo, echo=FALSE, results='asis'}
