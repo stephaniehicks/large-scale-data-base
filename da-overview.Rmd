@@ -7,7 +7,7 @@ library(rebook)
 chapterPreamble(cache = TRUE)
 ```
 
-```{r setup, include=FALSE}
+```{r setup2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
