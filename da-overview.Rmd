@@ -7,7 +7,7 @@ library(rebook)
 chapterPreamble(cache = TRUE)
 ```
 
-```{r setup, include=FALSE}
+```{r setup2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
@@ -742,17 +742,17 @@ There is also the `NULL` backend, which means the data are realized in memory as
 This is the default realization backend upon loading/attaching the `r BiocStyle::Biocpkg("DelayedArray")` package.
 
 ```{r}
-getRealizationBackend()
+getAutoRealizationBackend()
 ```
 
 The default realization backend can be altered with `setRealizationBackend()`.
 
 ```{r}
-setRealizationBackend("HDF5Array")
-getRealizationBackend()
+setAutoRealizationBackend("HDF5Array")
+getAutoRealizationBackend()
 
-setRealizationBackend(NULL)
-getRealizationBackend()
+setAutoRealizationBackend(NULL)
+getAutoRealizationBackend()
 ```
 
 It can be important to know what your current realization backend is because it will be used implicitly by some functions.
@@ -763,11 +763,11 @@ For example, matrix multiplication that involves a *DelayedMatrix* uses the curr
 DelayedArray:::set_verbose_block_processing(TRUE)
 
 # Perform matrix multiplication with HDF5Array backend.
-setRealizationBackend("HDF5Array")
+setAutoRealizationBackend("HDF5Array")
 tenx_subset %*% matrix(1, nrow = ncol(tenx_subset))
 
 # Perform matrix multiplication with NULL backend.
-setRealizationBackend(NULL)
+setAutoRealizationBackend(NULL)
 tenx_subset %*% matrix(1, nrow = ncol(tenx_subset))
 
 # Disable verbose block processing.
@@ -789,7 +789,7 @@ Because it allows us to easily switch out the realization backend and will defer
 
 ```{r}
 # Set the default realization backend to be HDF5Array.
-setRealizationBackend("HDF5Array")
+setAutoRealizationBackend("HDF5Array")
 
 # Realize as a TENxMatrix by explicitly specifying it.
 realize(tenx_subset, BACKEND = "TENxMatrix")
@@ -798,7 +798,7 @@ realize(tenx_subset, BACKEND = "TENxMatrix")
 realize(tenx_subset)
 
 # Set the default realization backend to be NULL.
-setRealizationBackend(NULL)
+setAutoRealizationBackend(NULL)
 ```
 
 This is probably most useful when writing package code so that you can allow the user control over the realization backend.
